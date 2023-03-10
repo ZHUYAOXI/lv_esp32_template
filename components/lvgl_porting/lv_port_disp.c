@@ -74,22 +74,22 @@ void lv_port_disp_init(void)
      */
 
     /* Example for 1) */
-    static lv_disp_draw_buf_t draw_buf_dsc_1;
-    static lv_color_t buf_1[LV_HOR_RES_MAX * 10];                          /*A buffer for 10 rows*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, LV_HOR_RES_MAX * 10);   /*Initialize the display buffer*/
+    // static lv_disp_draw_buf_t draw_buf_dsc_1;
+    // static lv_color_t buf_1[DISP_BUF_SIZE];                          /*A buffer for 10 rows*/
+    // lv_disp_draw_buf_init(&draw_buf_dsc_1, buf_1, NULL, DISP_BUF_SIZE);   /*Initialize the display buffer*/
 
-    /* Example for 2) */
+    /* Example for 2) 双缓冲区*/
     static lv_disp_draw_buf_t draw_buf_dsc_2;
-    static lv_color_t buf_2_1[LV_HOR_RES_MAX * 10];                        /*A buffer for 10 rows*/
-    static lv_color_t buf_2_2[LV_HOR_RES_MAX * 10];                        /*An other buffer for 10 rows*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, LV_HOR_RES_MAX * 10);   /*Initialize the display buffer*/
+    static lv_color_t buf_2_1[DISP_BUF_SIZE];                        /*A buffer for 10 rows*/
+    static lv_color_t buf_2_2[DISP_BUF_SIZE];                        /*An other buffer for 10 rows*/
+    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, DISP_BUF_SIZE);   /*Initialize the display buffer*/
 
     /* Example for 3) also set disp_drv.full_refresh = 1 below*/
-    static lv_disp_draw_buf_t draw_buf_dsc_3;
-    static lv_color_t buf_3_1[LV_HOR_RES_MAX * LV_VER_RES_MAX];            /*A screen sized buffer*/
-    static lv_color_t buf_3_2[LV_HOR_RES_MAX * LV_VER_RES_MAX];            /*Another screen sized buffer*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_3, buf_3_1, buf_3_2,
-                          LV_VER_RES_MAX * LV_VER_RES_MAX);   /*Initialize the display buffer*/
+    // static lv_disp_draw_buf_t draw_buf_dsc_3;
+    // static lv_color_t buf_3_1[DISP_BUF_SIZE];                              /*A screen sized buffer*/
+    // static lv_color_t buf_3_2[DISP_BUF_SIZE];                              /*Another screen sized buffer*/
+    // lv_disp_draw_buf_init(&draw_buf_dsc_3, buf_3_1, buf_3_2,
+    //                       DISP_BUF_SIZE); /*Initialize the display buffer*/
 
     /*-----------------------------------
      * Register the display in LVGL
@@ -101,14 +101,14 @@ void lv_port_disp_init(void)
     /*Set up the functions to access to your display*/
 
     /*Set the resolution of the display*/
-    disp_drv.hor_res = 480;
-    disp_drv.ver_res = 320;
+    disp_drv.hor_res = LV_HOR_RES_MAX;
+    disp_drv.ver_res = LV_VER_RES_MAX;
 
     /*Used to copy the buffer's content to the display*/
-    disp_drv.flush_cb = disp_flush;
+    disp_drv.flush_cb = disp_driver_flush;
 
     /*Set a display buffer*/
-    disp_drv.draw_buf = &draw_buf_dsc_1;
+    disp_drv.draw_buf = &draw_buf_dsc_2;
 
     /*Required for Example 3)*/
     //disp_drv.full_refresh = 1
@@ -130,29 +130,30 @@ void lv_port_disp_init(void)
 static void disp_init(void)
 {
     /*You code here*/
+    lvgl_driver_init();
 }
 
 /*Flush the content of the internal buffer the specific area on the display
  *You can use DMA or any hardware acceleration to do this operation in the background but
  *'lv_disp_flush_ready()' has to be called when finished.*/
-static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
-{
-    /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
+// static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
+// {
+//     /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
 
-    int32_t x;
-    int32_t y;
-    for(y = area->y1; y <= area->y2; y++) {
-        for(x = area->x1; x <= area->x2; x++) {
-            /*Put a pixel to the display. For example:*/
-            /*put_px(x, y, *color_p)*/
-            color_p++;
-        }
-    }
+//     int32_t x;
+//     int32_t y;
+//     for(y = area->y1; y <= area->y2; y++) {
+//         for(x = area->x1; x <= area->x2; x++) {
+//             /*Put a pixel to the display. For example:*/
+//             /*put_px(x, y, *color_p)*/
+//             color_p++;
+//         }
+//     }
 
-    /*IMPORTANT!!!
-     *Inform the graphics library that you are ready with the flushing*/
-    lv_disp_flush_ready(disp_drv);
-}
+//     /*IMPORTANT!!!
+//      *Inform the graphics library that you are ready with the flushing*/
+//     lv_disp_flush_ready(disp_drv);
+// }
 
 /*OPTIONAL: GPU INTERFACE*/
 
