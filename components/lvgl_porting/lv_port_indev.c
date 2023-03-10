@@ -9,9 +9,9 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_port_indev_template.h"
-#include "../../lvgl.h"
-
+#include "lv_port_indev.h"
+#include "lvgl/lvgl.h"
+#include "lvgl_helpers.h"
 /*********************
  *      DEFINES
  *********************/
