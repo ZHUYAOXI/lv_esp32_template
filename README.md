@@ -8,7 +8,7 @@ idf.py set-target esp32s3
 # 配置显示
 
 idf.py menuconfig
-
+配置屏幕类型、引脚、时钟、LVGL
 # 编译烧写
 
 idf.py build flash -p comx monitor
