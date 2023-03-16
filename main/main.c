@@ -6,7 +6,7 @@
 #include "lvgl/lvgl.h"
 #include "lv_port_disp.h"
 #include "demos/lv_demos.h"
-
+// #include "ui/ui.h"//ui写好取消注释
 static void lvtickTask(void *arg);
 
 void app_main(void)
@@ -17,6 +17,7 @@ void app_main(void)
    xTaskCreate(lvtickTask, "lvtickTask", 1024 * 4, NULL, configMAX_PRIORITIES, NULL);
 
    lv_demo_benchmark();
+   // ui_init();//ui写好取消注释
    while (1)
    {
       lv_task_handler();
